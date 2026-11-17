@@ -1,12 +1,12 @@
 import type { DesiredRecord, DnsAdapter, DnsRecord, OperationContext, Ownership, Zone } from '@flash-dns/types'
 import { Buffer } from 'node:buffer'
+import process from 'node:process'
 import { setTimeout as delay } from 'node:timers/promises'
 import { checkAborted, DnsError } from '@flash-dns/types'
 
 export interface CloudflareOptions { proxied?: boolean }
 export interface CloudflareAdapterOptions {
-  apiToken: string
-  zoneId?: string
+  env?: Record<string, string | undefined>
   fetcher?: typeof fetch
   timeoutMs?: number
   maxRetries?: number
@@ -57,8 +57,11 @@ export function decodeOwnership(comment?: string): Ownership | undefined {
 
 const normalizeName = (value: string): string => value.toLowerCase().replace(/\.$/, '')
 
-export function createCloudflareAdapter(options: CloudflareAdapterOptions): DnsAdapter<CloudflareOptions> {
-  if (!options.apiToken?.trim())
+export function createCloudflareAdapter(options: CloudflareAdapterOptions = {}): DnsAdapter<CloudflareOptions> {
+  const env = options.env ?? process.env
+  const apiToken = env.CLOUDFLARE_API_TOKEN?.trim()
+  const zoneId = env.CLOUDFLARE_ZONE_ID?.trim()
+  if (!apiToken)
     throw new DnsError('AUTH_INVALID', 'CLOUDFLARE_API_TOKEN is required')
   const fetcher = options.fetcher ?? fetch
   const retries = options.maxRetries ?? 2
@@ -78,7 +81,7 @@ export function createCloudflareAdapter(options: CloudflareAdapterOptions): DnsA
         const response = await fetcher(`https://api.cloudflare.com/client/v4${path}`, {
           method,
           signal,
-          headers: { 'Authorization': `Bearer ${options.apiToken}`, 'Content-Type': 'application/json' },
+          headers: { 'Authorization': `Bearer ${apiToken}`, 'Content-Type': 'application/json' },
           ...(body === undefined ? {} : { body: JSON.stringify(body) })
         })
         const retryHeader = response.headers.get('retry-after')
@@ -187,8 +190,8 @@ export function createCloudflareAdapter(options: CloudflareAdapterOptions): DnsA
     },
     normalizeDesired,
     async resolveZone(name, context): Promise<Zone> {
-      const zones = options.zoneId
-        ? [(await request<ApiZone>(zonePath(options.zoneId), 'GET', undefined, context, 'zone'))?.result].filter((v): v is ApiZone => !!v)
+      const zones = zoneId
+        ? [(await request<ApiZone>(zonePath(zoneId), 'GET', undefined, context, 'zone'))?.result].filter((v): v is ApiZone => !!v)
         : await pages<ApiZone>(`/zones?name=${encodeURIComponent(name)}`, context)
       const matches = zones.filter(zone => normalizeName(zone.name) === normalizeName(name))
       if (matches.length !== 1)

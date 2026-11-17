@@ -6,6 +6,10 @@ import { cloudflareFixture, owned, owner } from './helpers/cloudflare'
 adapterContract('Cloudflare', () => cloudflareFixture().adapter)
 
 describe('cloudflare adapter contract', () => {
+  it('reads the API token from the adapter environment', () => {
+    expect(() => createCloudflareAdapter({ env: {} })).toThrowError(expect.objectContaining({ code: 'AUTH_INVALID' }))
+  })
+
   it('round-trips exact owner identity and rejects invalid or ambiguous metadata', () => {
     const encoded = encodeOwnership({ application: 'app:中文', id: 'id/with:separators' })
     expect(decodeOwnership(encoded)).toEqual({ application: 'app:中文', id: 'id/with:separators' })
@@ -54,13 +58,13 @@ describe('cloudflare adapter contract', () => {
   it('rejects wrong or inactive Zones', async () => {
     const f = cloudflareFixture()
     await expect(f.adapter.resolveZone('other.com')).rejects.toMatchObject({ code: 'ZONE_NOT_FOUND' })
-    const adapter = createCloudflareAdapter({ apiToken: 'token', zoneId: 'z', fetcher: async () => Response.json({ success: true, result: { id: 'z', name: 'example.com', status: 'pending' } }) })
+    const adapter = createCloudflareAdapter({ env: { CLOUDFLARE_API_TOKEN: 'token', CLOUDFLARE_ZONE_ID: 'z' }, fetcher: async () => Response.json({ success: true, result: { id: 'z', name: 'example.com', status: 'pending' } }) })
     await expect(adapter.resolveZone('example.com')).rejects.toMatchObject({ code: 'ZONE_NOT_ACTIVE' })
   })
   it('cancels during fetch and retry delay', async () => {
     const controller = new AbortController()
     const adapter = createCloudflareAdapter({
-      apiToken: 'token',
+      env: { CLOUDFLARE_API_TOKEN: 'token' },
       fetcher: async () => {
         controller.abort()
         throw new Error('cancelled')
@@ -69,7 +73,7 @@ describe('cloudflare adapter contract', () => {
     await expect(adapter.resolveZone('example.com', { signal: controller.signal })).rejects.toMatchObject({ code: 'OPERATION_ABORTED' })
     const retryController = new AbortController()
     const retryAdapter = createCloudflareAdapter({
-      apiToken: 'token',
+      env: { CLOUDFLARE_API_TOKEN: 'token' },
       fetcher: async () => new Response('', { status: 429 }),
       sleep: async () => {
         retryController.abort()

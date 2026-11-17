@@ -71,8 +71,10 @@ export function cloudflareFixture(initial: TestRecord[] = []) {
   }
   const sleeps: number[] = []
   const adapter = createCloudflareAdapter({
-    apiToken: 'fixture-secret',
-    zoneId: 'zone-1',
+    env: {
+      CLOUDFLARE_API_TOKEN: 'fixture-secret',
+      CLOUDFLARE_ZONE_ID: 'zone-1'
+    },
     fetcher,
     sleep: async (ms) => { sleeps.push(ms) }
   })

@@ -42,7 +42,7 @@ export function validateConfig(config: unknown): asserts config is DnsConfig {
     naming: { template: 'string' },
     variables: 'variables',
     record: { type: 'string', content: 'string', ttl: 'ttl' },
-    providers: { cloudflare: { zoneId: 'string', proxied: 'boolean' } }
+    providers: { cloudflare: { proxied: 'boolean' } }
   }
   function visit(value: Record<string, unknown>, fields: Record<string, unknown>, path: string): void {
     for (const [key, item] of Object.entries(value)) {
@@ -120,7 +120,6 @@ export interface CliOverrides {
   type?: string
   content?: string
   ttl?: string | number
-  zoneId?: string
   proxied?: boolean
   branch?: string
   session?: string
@@ -135,7 +134,6 @@ export interface ResolvedDnsConfig {
   content?: string
   ttl?: number | 'auto'
   proxied?: boolean
-  zoneId?: string
   sources: Record<string, string>
   configDir: string
 }
@@ -220,7 +218,6 @@ export function resolveDnsConfig(input: { cwd: string, config: DnsConfig, config
     content: pick('record.content', cli.content, env.FLASH_DNS_CONTENT, config.record?.content),
     ttl,
     proxied,
-    zoneId: pick('providers.cloudflare.zoneId', cli.zoneId, env.CLOUDFLARE_ZONE_ID, config.providers?.cloudflare?.zoneId),
     sources,
     configDir
   }

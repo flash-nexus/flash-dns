@@ -23,7 +23,6 @@ interface CliOptions {
   config?: TextValue
   provider?: TextValue
   zone?: TextValue
-  zoneId?: TextValue
   hostname?: TextValue
   project?: TextValue
   projectId?: TextValue
@@ -57,7 +56,6 @@ function withDnsOptions(command: Command): Command {
   return withConfigOptions(command)
     .option('--provider <name>', 'DNS provider override')
     .option('--zone <domain>', 'DNS zone name')
-    .option('--zone-id <id>', 'Cloudflare zone ID')
     .option('--hostname <name>', 'Complete hostname')
     .option('--project <name>', 'Project name')
     .option('--project-id <id>', 'Stable project identity')
@@ -168,7 +166,7 @@ export async function runCli(argv = process.argv.slice(2), runtime: RunCliOption
     }
     const loaded = await loadDnsConfig(cwd, textFlag('config'))
     const overrides: CliOverrides = {}
-    for (const key of ['provider', 'zone', 'hostname', 'project', 'projectId', 'template', 'type', 'content', 'ttl', 'zoneId', 'branch', 'session'] as const) {
+    for (const key of ['provider', 'zone', 'hostname', 'project', 'projectId', 'template', 'type', 'content', 'ttl', 'branch', 'session'] as const) {
       const value = textFlag(key)
       if (value !== undefined)
         overrides[key] = value
@@ -184,7 +182,7 @@ export async function runCli(argv = process.argv.slice(2), runtime: RunCliOption
     else if (command === 'remove' && textFlag('name'))
       overrides.hostname = textFlag('name')
     const config = resolveDnsConfig({ cwd, config: loaded.config, configFile: loaded.source, env, cli: overrides })
-    const adapter = createCloudflareAdapter({ apiToken: env.CLOUDFLARE_API_TOKEN ?? '', zoneId: config.zoneId, fetcher: runtime.fetcher })
+    const adapter = createCloudflareAdapter({ env, fetcher: runtime.fetcher })
     const manager = createDnsManager({ adapter })
     if (interactive && !silent)
       spinner = yoctoSpinner({ text: `flash-dns ${command}`, stream: process.stderr }).start()

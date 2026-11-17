@@ -134,7 +134,6 @@ npx flash-dns doctor   # 检查 Token、Zone 和 DNS 读取能力
 | --- | --- |
 | `--provider <name>` | 服务商 ID；目前只支持 `cloudflare` |
 | `--zone <domain>` | Zone 名称，例如 `example.com` |
-| `--zone-id <id>` | Cloudflare Zone ID；跳过按名称查找 |
 | `--hostname <fqdn>` | 完整主机名；优先于模板 |
 | `--project <name>` | `{project}` 使用的项目名 |
 | `--project-id <id>` | 稳定的归属 ID |
@@ -181,7 +180,6 @@ export default defineConfig({
 
   providers: {
     cloudflare: {
-      zoneId: 'optional-zone-id',
       proxied: false
     }
   }
@@ -197,7 +195,6 @@ export default defineConfig({
 - `variables` 提供自定义模板变量。
 - `plan` 和 `ensure` 需要 `record.type` 与 `record.content`。
 - `record.ttl` 接受 `auto` 或秒数。
-- `providers.cloudflare.zoneId` 可选；省略时按名称查找 Zone。
 - `providers.cloudflare.proxied` 仅在显式设置时生效。
 
 未知字段会直接报错。配置文件是可信代码，加载时会被执行，不要加载不可信的配置。
@@ -218,8 +215,8 @@ export default defineConfig({
 | `FLASH_DNS_CONTENT` | `record.content` |
 | `FLASH_DNS_TTL` | `record.ttl` |
 | `FLASH_DNS_PROXIED` | `providers.cloudflare.proxied`；`true` 或 `false` |
-| `CLOUDFLARE_ZONE_ID` | `providers.cloudflare.zoneId` |
-| `CLOUDFLARE_API_TOKEN` | 适配器凭据；不会进入解析后的配置 |
+| `CLOUDFLARE_ZONE_ID` | Cloudflare 适配器可选提示；不会进入解析后的配置 |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare 适配器凭据；不会进入解析后的配置 |
 
 ### 命名规则
 
@@ -255,7 +252,9 @@ export default defineConfig({
 | Zone · DNS · Edit | 读取、创建、更新和删除该 Zone 的记录 |
 | Zone · Zone · Read | 按名称解析 Zone，或校验固定 Zone ID |
 
-请把 Token 限制在实际管理的 Zone 上并设置过期时间。即使固定了 `zoneId`，工具仍会读取并校验 Zone，因此同样需要 Zone Read。Cloudflare 后台可能把 `Edit` 显示为 `Write`，含义相同。
+请把 Token 限制在实际管理的 Zone 上并设置过期时间。未设置
+`CLOUDFLARE_ZONE_ID` 时，适配器会按名称查找 Zone，因此需要 Zone Read。
+Cloudflare 后台可能把 `Edit` 显示为 `Write`，含义相同。
 
 ## 输出与退出码
 
@@ -294,7 +293,7 @@ import { createCloudflareAdapter } from '@flash-dns/adapter-cloudflare'
 import { createDnsManager } from '@flash-dns/core'
 
 const dns = createDnsManager({
-  adapter: createCloudflareAdapter({ apiToken, zoneId })
+  adapter: createCloudflareAdapter()
 })
 
 const { ref } = await dns.ensure({

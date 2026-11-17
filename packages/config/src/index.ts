@@ -8,7 +8,7 @@ export interface DnsConfig {
   naming?: { template?: string }
   variables?: Record<string, string>
   record?: { type?: RecordType, content?: string, ttl?: Ttl }
-  providers?: { cloudflare?: { zoneId?: string, proxied?: boolean } }
+  providers?: { cloudflare?: { proxied?: boolean } }
 }
 
 export function defineConfig<T extends DnsConfig>(config: T): T {

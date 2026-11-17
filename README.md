@@ -134,7 +134,6 @@ Options override environment variables and config values. `flash-dns --help` pri
 | --- | --- |
 | `--provider <name>` | Provider ID; only `cloudflare` is supported |
 | `--zone <domain>` | Zone name, for example `example.com` |
-| `--zone-id <id>` | Cloudflare zone ID; skips lookup by name |
 | `--hostname <fqdn>` | Complete hostname; takes precedence over the template |
 | `--project <name>` | Project name used by `{project}` |
 | `--project-id <id>` | Stable owner ID |
@@ -181,7 +180,6 @@ export default defineConfig({
 
   providers: {
     cloudflare: {
-      zoneId: 'optional-zone-id',
       proxied: false
     }
   }
@@ -197,7 +195,6 @@ export default defineConfig({
 - `variables` supplies custom template values.
 - `record.type` and `record.content` are required for `plan` and `ensure`.
 - `record.ttl` accepts `auto` or a number of seconds.
-- `providers.cloudflare.zoneId` is optional; without it, the zone is resolved by name.
 - `providers.cloudflare.proxied` is only applied when explicitly set.
 
 Unknown fields are rejected. The config file is trusted code and is executed when loaded, so do not load untrusted config files.
@@ -218,8 +215,8 @@ Unknown fields are rejected. The config file is trusted code and is executed whe
 | `FLASH_DNS_CONTENT` | `record.content` |
 | `FLASH_DNS_TTL` | `record.ttl` |
 | `FLASH_DNS_PROXIED` | `providers.cloudflare.proxied`; `true` or `false` |
-| `CLOUDFLARE_ZONE_ID` | `providers.cloudflare.zoneId` |
-| `CLOUDFLARE_API_TOKEN` | Adapter credential; never enters the resolved config |
+| `CLOUDFLARE_ZONE_ID` | Optional Cloudflare adapter hint; never enters the resolved config |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare adapter credential; never enters the resolved config |
 
 ### Naming rules
 
@@ -255,7 +252,9 @@ Create a **Custom token** at <https://dash.cloudflare.com/profile/api-tokens> wi
 | Zone · DNS · Edit | Read, create, update and delete records in the zone |
 | Zone · Zone · Read | Resolve the zone by name, or validate a fixed zone ID |
 
-Scope the token to the zones you manage and set an expiry. A fixed `zoneId` is still read and validated, so Zone Read is required either way. The dashboard may label `Edit` as `Write`; they mean the same thing.
+Scope the token to the zones you manage and set an expiry. Without
+`CLOUDFLARE_ZONE_ID`, the adapter resolves the zone by name, so Zone Read is
+required. The dashboard may label `Edit` as `Write`; they mean the same thing.
 
 ## Output and exit codes
 
@@ -294,7 +293,7 @@ import { createCloudflareAdapter } from '@flash-dns/adapter-cloudflare'
 import { createDnsManager } from '@flash-dns/core'
 
 const dns = createDnsManager({
-  adapter: createCloudflareAdapter({ apiToken, zoneId })
+  adapter: createCloudflareAdapter()
 })
 
 const { ref } = await dns.ensure({
