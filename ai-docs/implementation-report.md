@@ -49,7 +49,7 @@
 | --- | --- | --- | --- |
 | packageManager | 通过 | 无 manifest | 根包 pnpm@12.14.0，CI 不重复指定版本 |
 | repository | 通过 | 设计目标 | 与实际 origin 对应，包含各包 directory |
-| homepage / bugs | 通过 | 无 | flash-tunnel/flash-dns README 与 issues |
+| homepage / bugs | 通过 | 无 | flash-nexus/flash-dns README 与 issues |
 | license | 通过 | 待用户选择 | 用户明确选择 MIT，全部包附 LICENSE |
 | author | 待补充（建议项） | 未明确 | 未编造作者姓名或邮箱 |
 | engines.node | 通过元数据校验 | 参考基线 | >=22.14.0，构建 target node22；最低版本运行验证由 CI 覆盖 |

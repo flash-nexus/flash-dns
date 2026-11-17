@@ -5,13 +5,13 @@
   "private": true,
   "packageManager": "pnpm@12.15.0",
   "license": "MIT",
-  "homepage": "https://github.com/flash-tunnel/flash-dns#readme",
+  "homepage": "https://github.com/flash-nexus/flash-dns#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flash-tunnel/flash-dns.git"
+    "url": "git+https://github.com/flash-nexus/flash-dns.git"
   },
   "bugs": {
-    "url": "https://github.com/flash-tunnel/flash-dns/issues"
+    "url": "https://github.com/flash-nexus/flash-dns/issues"
   },
   "engines": {
     "node": ">=22.14.0"

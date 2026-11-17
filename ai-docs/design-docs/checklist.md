@@ -17,7 +17,7 @@
 
 ## 工程初始化
 
-- [x] 检查远端初始内容，按用户后续要求克隆或初始化 Git；目标为 `git@github.com:flash-tunnel/flash-dns.git`。
+- [x] 检查远端初始内容，按用户后续要求克隆或初始化 Git；目标为 `git@github.com:flash-nexus/flash-dns.git`。
 - [x] 明确本项目许可证并创建 LICENSE。
 - [ ] 核对 npm 包、`@flash-dns` 组织和发布权限。
 - [x] 建立 workspace 和六个包。
@@ -50,7 +50,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| 产品名与仓库 | 已确认 flash-dns、github.com/flash-tunnel/flash-dns |
+| 产品名与仓库 | 已确认 flash-dns、github.com/flash-nexus/flash-dns |
 | 项目目录 | 已按同级项目惯例创建 D:\Projects\flash-dns |
 | 许可证 | 用户于 2026-10-22 明确选择 MIT，已创建 LICENSE |
 | npm 作用域 | 拟使用 @flash-dns；用户已建组织，实际权限待核对 |

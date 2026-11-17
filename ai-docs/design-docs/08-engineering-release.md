@@ -6,7 +6,7 @@
 
 调研时该项目使用 pnpm 12.14.0、ESLint 10、antfu config 9、TypeScript 6、unbuild 3、Vitest 5、simple-git-hooks 2、nano-staged 1、bumpp 12。它们是本地参考版本，不代表已验证适用于新项目；初始化时固定并验证兼容组合。
 
-本项目实际固定 pnpm 12.14.0、ESLint 10.13.0、antfu config 9.5.1、TypeScript 5.9.3、unbuild 3.6.1、Vitest 5.0.5。TypeScript 采用 5.9.3 以符合 unbuild 的 peer 范围。配置通过 unconfig + jiti alias 加载，不改写用户配置文本，也不在配置目录写临时转换文件。发布 CI 使用下述 `release.yaml`；尚未增加 bumpp。
+本项目实际固定 pnpm 12.15.0、ESLint 10.13.0、antfu config 9.5.1、TypeScript 6.0.3、unbuild 3.6.1、Vitest 5.0.5。配置通过 unconfig + jiti alias 加载，不改写用户配置文本，也不在配置目录写临时转换文件。发布 CI 使用下述 `release.yaml`，根脚本通过 `bumpp -r` 统一推进多包版本。
 
 ## 开发约定
 
@@ -87,7 +87,7 @@ CLI 项目的版本验证和发包流程与演示站点部署流程独立。按�
 
 `verify` 使用 Windows / Linux 和 Node 22.14 / 24 矩阵，执行 build、lint、typecheck、test、pack smoke；全部成功后 `publish` 在 Ubuntu、Node 24 上重新构建并执行 `pnpm -r publish --access public --no-git-checks`。pnpm 版本仅由根 manifest 的 packageManager 提供。
 
-发布认证沿用参考项目的 npm Trusted Publisher：publish job 显式设置 `id-token: write` 与 `contents: read`，安装支持 OIDC 的 npm CLI，不注入 NPM_TOKEN。各包 npm 后台需绑定 `flash-tunnel/flash-dns` 和精确文件名 `release.yaml`；后台状态尚未核验。
+发布认证沿用参考项目的 npm Trusted Publisher：publish job 显式设置 `id-token: write` 与 `contents: read`，安装支持 OIDC 的 npm CLI，不注入 NPM_TOKEN。各包 npm 后台需绑定 `flash-nexus/flash-dns` 和精确文件名 `release.yaml`；后台状态尚未核验。
 
 不把 GitHub Actions 的 OIDC 权限原样复制到 GitLab CI。认证依据实际发布平台选择，仓库 URL 也不意味着用户已经完成 npm Trusted Publisher 绑定。
 
@@ -98,7 +98,7 @@ CLI 项目的版本验证和发包流程与演示站点部署流程独立。按�
 | 检查 | 处理原则 |
 | --- | --- |
 | packageManager | 根 manifest 固定版本，避免 workflow 再指定冲突来源 |
-| repository | 来自真实 remote，目标为 github.com/flash-tunnel/flash-dns |
+| repository | 来自真实 remote，目标为 github.com/flash-nexus/flash-dns |
 | homepage / bugs | 根据实际仓库填写，不使用旧项目地址 |
 | license | 依据用户选择及本项目 LICENSE，不能默认 MIT |
 | author | 使用已明确的信息，不编造姓名或联系方式 |

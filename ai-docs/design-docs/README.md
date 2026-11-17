@@ -3,7 +3,7 @@
 记录本轮讨论已经确认的产品边界、架构和工程规范，作为后续实现的依据。
 
 - 项目目录：`D:\Projects\flash-dns`
-- 目标仓库：`git@github.com:flash-tunnel/flash-dns.git`
+- 目标仓库：`git@github.com:flash-nexus/flash-dns.git`
 - 用户已创建 flash-dns 包及组织；具体 npm 作用域、发布权限在接入发布前核对。
 - 当前阶段：已实现首版独立 CLI / SDK、Cloudflare 适配器及离线测试；尚未发布或配置真实 DNS。实际接口和验证记录见 [项目 README](../../README.md) 与 [开发报告](../implementation-report.md)。
 - 文档日期：2026-10-22。

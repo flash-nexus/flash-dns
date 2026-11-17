@@ -4,11 +4,11 @@
 
 flash-dns 把项目身份和命名规则变成一条 DNS 记录：将 `@org-name/project-name` 标准化为 `org-name-project-name`，按模板生成 `org-name-project-name.preview.example.com` 这样的主机名，再通过服务商适配器协调 A / AAAA / CNAME / TXT 记录。可以在终端里使用 CLI，也可以把 SDK 嵌入部署工具。它只管理权威 DNS 记录，不是解析器、隧道管理器或部署系统。
 
-[English](https://github.com/flash-tunnel/flash-dns/blob/main/README.md) | **简体中文**
+[English](https://github.com/flash-nexus/flash-dns/blob/main/README.md) | **简体中文**
 
 [![npm version](https://img.shields.io/npm/v/flash-dns?style=flat-square&color=blue)](https://www.npmjs.com/package/flash-dns)
 [![npm downloads](https://img.shields.io/npm/dm/flash-dns?style=flat-square)](https://www.npmjs.com/package/flash-dns)
-[![license](https://img.shields.io/npm/l/flash-dns?style=flat-square)](https://github.com/flash-tunnel/flash-dns/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/flash-dns?style=flat-square)](https://github.com/flash-nexus/flash-dns/blob/main/LICENSE)
 [![node](https://img.shields.io/node/v/flash-dns?style=flat-square)](https://www.npmjs.com/package/flash-dns)
 
 > 早期预览版（`0.1.x`）。核心与具体服务商解耦，但目前只有 Cloudflare 适配器。正式使用前先用 `plan` 检查变更。
@@ -403,12 +403,12 @@ pnpm test:pack
 
 推送 `v*` tag 是唯一的发布触发条件。workflow 会先在 Windows / Linux 和 Node 22.14 / 24 上执行 build、lint、typecheck、测试和 pack smoke，然后在 Ubuntu 上通过 npm Trusted Publisher（OIDC）发布 workspace 中的公开包，不使用 `NPM_TOKEN`。
 
-请让所有包的版本与 tag 保持一致，例如 `v0.1.1` 对应版本 `0.1.1`；并在 npm 后台为每个包绑定 `flash-tunnel/flash-dns` 仓库和 `release.yaml` workflow。
+请让所有包的版本与 tag 保持一致，例如 `v0.1.1` 对应版本 `0.1.1`；并在 npm 后台为每个包绑定 `flash-nexus/flash-dns` 仓库和 `release.yaml` workflow。
 
 ## 设计文档
 
-完整设计见 [ai-docs/design-docs](https://github.com/flash-tunnel/flash-dns/tree/main/ai-docs/design-docs)。
+完整设计见 [ai-docs/design-docs](https://github.com/flash-nexus/flash-dns/tree/main/ai-docs/design-docs)。
 
 ## License
 
-[MIT](https://github.com/flash-tunnel/flash-dns/blob/main/LICENSE)
+[MIT](https://github.com/flash-nexus/flash-dns/blob/main/LICENSE)

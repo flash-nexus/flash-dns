@@ -4,14 +4,14 @@
   "version": "0.2.0",
   "description": "Typed configuration helpers for flash-dns.",
   "license": "MIT",
-  "homepage": "https://github.com/flash-tunnel/flash-dns#readme",
+  "homepage": "https://github.com/flash-nexus/flash-dns#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flash-tunnel/flash-dns.git",
+    "url": "git+https://github.com/flash-nexus/flash-dns.git",
     "directory": "packages/config"
   },
   "bugs": {
-    "url": "https://github.com/flash-tunnel/flash-dns/issues"
+    "url": "https://github.com/flash-nexus/flash-dns/issues"
   },
   "exports": {
     ".": {

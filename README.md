@@ -4,11 +4,11 @@
 
 flash-dns turns a project identity and a naming rule into a DNS record: it normalizes `@org-name/project-name` to `org-name-project-name`, renders a hostname such as `org-name-project-name.preview.example.com`, and reconciles A / AAAA / CNAME / TXT records through a provider adapter. Use the CLI in a terminal or embed the SDK in a deployment tool. flash-dns manages authoritative DNS records only — it is not a resolver, a tunnel manager, or a deployment system.
 
-**English** | [简体中文](https://github.com/flash-tunnel/flash-dns/blob/main/README_CN.md)
+**English** | [简体中文](https://github.com/flash-nexus/flash-dns/blob/main/README_CN.md)
 
 [![npm version](https://img.shields.io/npm/v/flash-dns?style=flat-square&color=blue)](https://www.npmjs.com/package/flash-dns)
 [![npm downloads](https://img.shields.io/npm/dm/flash-dns?style=flat-square)](https://www.npmjs.com/package/flash-dns)
-[![license](https://img.shields.io/npm/l/flash-dns?style=flat-square)](https://github.com/flash-tunnel/flash-dns/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/flash-dns?style=flat-square)](https://github.com/flash-nexus/flash-dns/blob/main/LICENSE)
 [![node](https://img.shields.io/node/v/flash-dns?style=flat-square)](https://www.npmjs.com/package/flash-dns)
 
 > Early preview (`0.1.x`). The core is provider-agnostic, but Cloudflare is the only adapter today. Review changes with `plan` before using it in production.
@@ -403,12 +403,12 @@ Issues and pull requests are welcome. Run `pnpm check` before opening one.
 
 Pushing a `v*` tag is the only release trigger. The workflow first verifies build, lint, typecheck, tests and pack smoke on Windows and Linux with Node 22.14 and 24. It then publishes the public workspace packages from Ubuntu using npm trusted publishing (OIDC); no `NPM_TOKEN` is used.
 
-Keep every package version in sync with the tag — for example `v0.1.1` needs version `0.1.1` — and configure the npm Trusted Publisher for each package with the `flash-tunnel/flash-dns` repository and the `release.yaml` workflow name.
+Keep every package version in sync with the tag — for example `v0.1.1` needs version `0.1.1` — and configure the npm Trusted Publisher for each package with the `flash-nexus/flash-dns` repository and the `release.yaml` workflow name.
 
 ## Design docs
 
-The full design is in [ai-docs/design-docs](https://github.com/flash-tunnel/flash-dns/tree/main/ai-docs/design-docs) (Chinese).
+The full design is in [ai-docs/design-docs](https://github.com/flash-nexus/flash-dns/tree/main/ai-docs/design-docs) (Chinese).
 
 ## License
 
-[MIT](https://github.com/flash-tunnel/flash-dns/blob/main/LICENSE)
+[MIT](https://github.com/flash-nexus/flash-dns/blob/main/LICENSE)

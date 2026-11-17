@@ -34,9 +34,9 @@ async function main(): Promise<void> {
     versions[pkg.name] = pkg.version
     assert.equal(pkg.license, 'MIT')
     assert.equal(pkg.repository.type, 'git')
-    assert.equal(pkg.repository.url, 'git+https://github.com/flash-tunnel/flash-dns.git')
-    assert.equal(pkg.homepage, 'https://github.com/flash-tunnel/flash-dns#readme')
-    assert.equal(pkg.bugs.url, 'https://github.com/flash-tunnel/flash-dns/issues')
+    assert.equal(pkg.repository.url, 'git+https://github.com/flash-nexus/flash-dns.git')
+    assert.equal(pkg.homepage, 'https://github.com/flash-nexus/flash-dns#readme')
+    assert.equal(pkg.bugs.url, 'https://github.com/flash-nexus/flash-dns/issues')
     assert.equal(pkg.engines.node, '>=22.14.0')
     assert(!pkg.private)
     const pack = JSON.parse(runPnpm(['pack', '--json', '--pack-destination', artifacts], location))
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
 import { createDnsManager, normalizeProjectName } from '@flash-dns/core'
 import { createCloudflareAdapter } from '@flash-dns/adapter-cloudflare'
 assert.equal(normalizeProjectName('@org/name'), 'org-name')
-assert.equal(typeof createDnsManager({ adapter: createCloudflareAdapter({ apiToken: 'fixture' }) }).ensure, 'function')
+assert.equal(typeof createDnsManager({ adapter: createCloudflareAdapter({ env: { CLOUDFLARE_API_TOKEN: 'fixture' } }) }).ensure, 'function')
 `
     await writeFile(join(sdk, 'smoke.mjs'), smoke)
     execute(process.execPath, ['smoke.mjs'], sdk)
@@ -93,7 +93,7 @@ assert.equal(typeof createDnsManager({ adapter: createCloudflareAdapter({ apiTok
 import { createDnsManager } from '@flash-dns/core'
 import { createCloudflareAdapter } from '@flash-dns/adapter-cloudflare'
 defineConfig({ record: { type: 'TXT', content: 'hello' } })
-const manager = createDnsManager({ adapter: createCloudflareAdapter({ apiToken: 'fixture' }) })
+const manager = createDnsManager({ adapter: createCloudflareAdapter({ env: { CLOUDFLARE_API_TOKEN: 'fixture' } }) })
 void manager.ensure({ zone: 'example.com', name: 'app.example.com', type: 'A', content: '192.0.2.1', owner: { application: 'smoke', id: 'p' }, providerOptions: { proxied: false } })
 // @ts-expect-error Provider options remain typed through the manager.
 void manager.ensure({ zone: 'example.com', name: 'app.example.com', type: 'A', content: '192.0.2.1', owner: { application: 'smoke', id: 'p' }, providerOptions: { unsupported: true } })
